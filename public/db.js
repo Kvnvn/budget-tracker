@@ -11,6 +11,11 @@ let db;
 const request = indexedDB.open("budget", 1);
 
 // TODO: create an object store in the open db
+request.onupgradeneeded = function(event) {
+  // create object store called "pending" and set autoIncrement to true
+  const db = target.result;
+  const offlineStore = db.createObjectStore("pending",{ autoIncrement: true, keyPath: "itemID"});
+};
 
 // TODO: log any indexedDB errors
 
