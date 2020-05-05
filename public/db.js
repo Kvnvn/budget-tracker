@@ -12,17 +12,24 @@ const request = indexedDB.open("budget", 1);
 
 // TODO: create an object store in the open db
 request.onupgradeneeded = function(event) {
-  // create object store called "pending" and set autoIncrement to true
   const db = target.result;
   const offlineStore = db.createObjectStore("pending",{ autoIncrement: true, keyPath: "itemID"});
 };
 
 // TODO: log any indexedDB errors
-
 // TODO: add code so that any transactions stored in the db
 // are sent to the backend if/when the user goes online
 // Hint: learn about "navigator.onLine" and the "online" window event.
 
+request.onsuccess = function({ target }) {
+  db = target.result;
+  if (navigator.onLine) {
+    checkDatabase();
+  }
+};
+request.onerror = function(event) {
+  request.sendStatus(400)
+  };
 // TODO: add code to saveRecord so that it accepts a record object for a
 // transaction and saves it in the db. This function is called in index.js
 // when the user creates a transaction while offline.
